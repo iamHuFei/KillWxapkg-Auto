@@ -27,10 +27,10 @@
 config/config.yaml 配置小程序目录绝对路径
 
 > KillWxapkg-Auto.exe -auto
-> 
+
 ![img_1.png](image%2Fimg_1.png)
 
-**有时候会编译失败找不到文件，这里多是小程序太大网络环境较慢导致，可以等一会小程序对应文件价值完删掉Ctrl+Z重新进行反编译。**
+**有时候会编译失败找不到文件，这里多是小程序太大网络环境较慢导致，可以等一会小程序对应文件加载完删掉Ctrl+Z重新进行反编译。**
 ```shell
 $ KillWxapkg-Auto.exe --help
 
@@ -61,5 +61,3 @@ $ KillWxapkg-Auto.exe --help
   -watch
         是否监听将要打包的文件夹，并自动打包
 ```
-视频演示：
-[vedio.mp4](image%2Fvedio.mp4)
