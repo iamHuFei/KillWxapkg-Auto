@@ -1,0 +1,4 @@
+wx_applet_path: D:\appdata\tencent\WeChat_resp\WeChat Files\Applet
+wx_output_path:
+time_out: 10
+# time_out为小程序资源加载超时时间，单位为秒，偶尔出现加载超时的情况，可以适当调大
