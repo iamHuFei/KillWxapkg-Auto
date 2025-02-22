@@ -1,9 +1,8 @@
 package key
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
+	"github.com/Ackites/KillWxapkg/api"
 	"regexp"
 	"strings"
 	"sync"
@@ -41,41 +40,13 @@ func MatchRules(input string) error {
 					if strings.TrimSpace(match[0]) == "" {
 						continue
 					}
-					err := appendToJSON(rule.Id, match[0])
+					err := api.LogHtml(rule.Id + ":" + match[0])
 					if err != nil {
 						return fmt.Errorf("failed to append to JSON: %v", err)
 					}
 				}
 			}
 		}
-	}
-
-	return nil
-}
-
-func appendToJSON(ruleId, matchedContent string) error {
-	jsonMutex.Lock()
-	defer jsonMutex.Unlock()
-
-	file, err := os.OpenFile("sensitive_data.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return fmt.Errorf("failed to open JSON file: %v", err)
-	}
-	defer func(file *os.File) {
-		err := file.Close()
-		if err != nil {
-			fmt.Printf("failed to close JSON file: %v", err)
-		}
-	}(file)
-
-	record := map[string]string{
-		"rule_id": ruleId,
-		"content": matchedContent,
-	}
-
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(record); err != nil {
-		return fmt.Errorf("failed to write to JSON file: %v", err)
 	}
 
 	return nil

@@ -38,7 +38,7 @@ func test() {
 		fmt.Printf("接收新增文件: %s\n", newFile)
 		// 等待目录加载时间
 		time.Sleep(10 * time.Second)
-		fmt.Println("等待加载目录.")
+		//fmt.Println("等待加载目录.")
 		subdirs, err := api.ListSubdirectories(newFile)
 		if err != nil {
 			log.Fatalf("错误: %v", err)
@@ -50,6 +50,11 @@ func test() {
 			fmt.Println(err)
 			return
 		}
+
+		// 输出状态码
+		//fmt.Println("响应内容:", string(body))
+
+		// 解析JSON响应
 		var responseData api.ResponseData
 		if err := json.Unmarshal(body, &responseData); err != nil {
 			fmt.Println("解析JSON失败:", err)
@@ -59,12 +64,16 @@ func test() {
 		appID := filepath.Base(newFile)
 		input := newFile + "\\" + subdirs[0] + "\\__APP__.wxapkg"
 		outputDir := "output\\"
-		if responseData.Data.Name != "" {
-			outputDir += responseData.Data.Name
+		if responseData.Data.Nickname != "" {
+			outputDir += responseData.Data.Nickname
 		} else {
 			outputDir += appID
 		}
-		fmt.Println("准备输出目录:", outputDir)
+		//fmt.Println("准备输出目录:", outputDir)
+		err = api.LogHtml(">>>小程序" + outputDir)
+		if err != nil {
+			return
+		}
 		fileExt := ""
 		restoreDir := false
 		pretty := false
@@ -72,7 +81,7 @@ func test() {
 		save := false
 		sensitive := true
 		cmd.Execute(appID, input, outputDir, fileExt, restoreDir, pretty, noClean, save, sensitive)
-		fmt.Println(">>> 完成逆向编译<-" + responseData.Data.Name)
+		//fmt.Println(">>> 完成逆向编译<-" + responseData.Data.Nickname)
 		fmt.Println(">>> 等待下一任务->")
 	}
 	//cmd.Execute(appID, input, outputDir, fileExt, restoreDir, pretty, noClean, save, sensitive)

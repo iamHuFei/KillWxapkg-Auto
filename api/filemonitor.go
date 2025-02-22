@@ -5,6 +5,8 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 // 监控目录并通过通道返回新增的文件名
@@ -29,8 +31,11 @@ func WatchNewFiles(directory string, fileChan chan<- string) error {
 			// 检测到新文件被创建
 			if event.Op&fsnotify.Create == fsnotify.Create {
 				//fmt.Printf("新文件: %s\n", event.Name)
+				//fmt.Println(filepath.Base(event.Name))
 				// 将新增的文件名发送到通道中
-				fileChan <- event.Name
+				if strings.HasPrefix(filepath.Base(event.Name), "wx") { // 过滤掉日志文件
+					fileChan <- event.Name
+				}
 			}
 		case err := <-watcher.Errors:
 			log.Println("监控错误:", err)
